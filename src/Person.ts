@@ -8,4 +8,4 @@ export interface Person {
   readonly last: string
 }
 
-export const isPerson = guard<Person>("ignore_custom")
+export const isPerson = guard<Person>(true)
