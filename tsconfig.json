@@ -4,7 +4,9 @@
     "outDir": "lib",
     "strict": true,
     "plugins": [{ "transform": "./plugin/index.ts" }],
-    "noEmit": true
+    "experimentalDecorators": true,
+    "noEmit": true,
+    "target": "ES5"
   },
   "include": ["src/**/*.ts", "plugin/**/*.ts"]
 }

@@ -1,12 +1,7 @@
-import { guard } from "./guard.js"
-import type { Person } from "./Person.js"
+//import type * as D from "./domain.js"
+//import type * as P from "./prelude.js"
 
-/**
- * @ets_macro guard getEither(guard(E), guard(A)) from "@effect-ts/macros/guards"
- */
-export interface Either<E, A> {
-  readonly _E: () => E
-  readonly _A: () => A
-}
-
-export const isEitherStringOrPerson = guard<Either<string, Person>>()
+//export const { toJson } = implicitly<P.Codec<D.Person>>()
+//
+//console.log(toJson({ first: "mike", last: "arnaldi", age: 30 as D.Age }))
+//
