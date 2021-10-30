@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2018"],
+    "outDir": "lib",
+    "strict": true,
+    "plugins": [{ "transform": "./plugin/index.ts" }],
+    "noEmit": true
+  },
+  "include": ["src/**/*.ts", "plugin/**/*.ts"]
+}

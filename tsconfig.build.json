@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2018"],
+    "outDir": "lib",
+    "target": "ES2021",
+    "module": "ESNext",
+    "strict": true,
+    "declaration": true,
+    "plugins": [{ "transform": "./plugin/index.ts" }]
+  },
+  "include": ["src/**/*.ts"]
+}

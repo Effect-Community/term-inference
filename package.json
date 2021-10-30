@@ -1,0 +1,34 @@
+{
+  "name": "term-inference",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf lib && ttsc -p tsconfig.build.json"
+  },
+  "type": "module",
+  "exports": {
+    "./*": {
+      "import": "./lib/*.js"
+    }
+  },
+  "dependencies": {
+    "@types/node": "^16.10.2",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.31.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-codegen": "^0.16.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jest": "^24.5.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-sort-destructure-keys": "^1.3.5",
+    "prettier": "^2.4.1",
+    "ts-expose-internals": "^4.4.4",
+    "ts-node": "^10.4.0",
+    "ttypescript": "^1.5.12",
+    "typescript": "^4.4.4"
+  }
+}
