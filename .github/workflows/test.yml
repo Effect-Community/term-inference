@@ -1,0 +1,38 @@
+name: Node CI
+
+on:
+  branches:
+    - master
+    - features/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: install deps and build
+        run: |
+          npm install -g yarn
+          yarn
+          yarn build
+        env:
+          CI: "true"
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: test
+        run: |
+          node lib/index.js
+        env:
+          CI: "true"
