@@ -168,52 +168,52 @@ refinementRules.push(
       type.ref.name === "Refinement" &&
       type.ref.params[1].ref._tag === "IntersectionType"
     ) {
-      const from = type.ref.params[0]
-      const target = type.ref.params[1] as Derive.TypeNodeRef<Derive.IntersectionType>
+      const typeFrom = type.ref.params[0]
+      const typeTo = type.ref.params[1] as Derive.TypeNodeRef<Derive.IntersectionType>
 
       if (
-        target.ref.members[target.ref.members.length - 1].ref._tag === "TypeReference"
+        typeTo.ref.members[typeTo.ref.members.length - 1].ref._tag === "TypeReference"
       ) {
-        const last = target.ref.members[
-          target.ref.members.length - 1
+        const brand = typeTo.ref.members[
+          typeTo.ref.members.length - 1
         ] as Derive.TypeNodeRef<Derive.TypeReference>
 
-        if (last.ref.name === "Brand") {
-          const compose = context.findInScope(
+        if (brand.ref.name === "Brand") {
+          const composeRefinement = context.findInScope(
             (_) =>
               _.ref._tag === "UnsupportedTsType" &&
               _.ref.typeStr ===
                 `<A, B extends A, C extends B>(left: Refinement<A, B>, right: Refinement<B, C>) => Refinement<A, C>`
           )
 
-          if (!compose) {
+          if (!composeRefinement) {
             return void 0
           }
 
-          const members = Array.from(target.ref.members)
-          members.pop()
-          const brandFrom = Derive.ref(Derive.intersectionType(members))
+          const remainingMembers = Array.from(typeTo.ref.members)
+          remainingMembers.pop()
+          const brandFrom = Derive.ref(Derive.intersectionType(remainingMembers))
 
-          let bridge: Derive.ResolutionResult
+          let bridgeBetweenTypeFromAndBrandFrom: Derive.ResolutionResult
 
-          if (!from.ref.isAssignableTo(brandFrom.ref)) {
+          if (!typeFrom.ref.isAssignableTo(brandFrom.ref)) {
             const resolveBridge = context.resolve(
-              Derive.ref(type.ref.copy([from, brandFrom]))
+              Derive.ref(type.ref.copy([typeFrom, brandFrom]))
             )
 
             if (!resolveBridge) {
               return void 0
             }
 
-            bridge = resolveBridge
+            bridgeBetweenTypeFromAndBrandFrom = resolveBridge
           }
 
-          const validation = (() => {
+          const brandValidation = (() => {
             const brandIdentifier = context.findInScope(
               (_) =>
                 _.ref._tag === "TypeReference" &&
                 _.ref.name === "BrandIdentifier" &&
-                Derive.equal(_.ref.params[1], last.ref.params[0])
+                Derive.equal(_.ref.params[1], brand.ref.params[0])
             )
 
             if (brandIdentifier && brandIdentifier.type.ref._tag === "TypeReference") {
@@ -222,33 +222,33 @@ refinementRules.push(
 
               const brandIdentifierFrom = Derive.ref(
                 Derive.intersectionType(
-                  brandTarget.ref.members.filter((_) => !Derive.equal(_, last))
+                  brandTarget.ref.members.filter((_) => !Derive.equal(_, brand))
                 )
               )
 
-              let bridge: Derive.ResolutionResult
+              let bridgeBetweenBrandFromAndBrandIdentifierFrom: Derive.ResolutionResult
 
               if (!brandFrom.ref.isAssignableTo(brandIdentifierFrom.ref)) {
                 const resolveBridge = context.resolve(
-                  Derive.ref(type.ref.copy([from, brandFrom]))
+                  Derive.ref(type.ref.copy([typeFrom, brandFrom]))
                 )
 
                 if (!resolveBridge) {
                   return void 0
                 }
 
-                bridge = resolveBridge
+                bridgeBetweenBrandFromAndBrandIdentifierFrom = resolveBridge
               }
 
-              if (bridge) {
-                const bridgeConst = bridge
+              if (bridgeBetweenBrandFromAndBrandIdentifierFrom) {
+                const bridgeConst = bridgeBetweenBrandFromAndBrandIdentifierFrom
                 return context.providing({
                   type: Derive.ref(
-                    type.ref.copy([from, brandIdentifier.type.ref.params[1]])
+                    type.ref.copy([typeFrom, brandIdentifier.type.ref.params[1]])
                   ),
                   compute: () =>
                     context.factory.createCallExpression(
-                      compose.compute(),
+                      composeRefinement.compute(),
                       [],
                       [bridgeConst.compute(), brandIdentifier.compute()]
                     )
@@ -257,7 +257,7 @@ refinementRules.push(
                 return brandIdentifier
               }
             } else {
-              const brandTarget = last.ref.params[0]
+              const brandTarget = brand.ref.params[0]
 
               if (brandTarget.ref._tag === "StringLiteralType") {
                 const matches = brandTarget.ref.value.match(/^(.*?)\((-?\d+\.?\d*)\)$/)
@@ -274,7 +274,9 @@ refinementRules.push(
 
                   if (fn) {
                     return context.providing({
-                      type,
+                      type: bridgeBetweenTypeFromAndBrandFrom
+                        ? Derive.ref(type.ref.copy([brandFrom, typeTo]))
+                        : type,
                       compute: () =>
                         context.factory.createCallExpression(
                           fn.compute(),
@@ -297,7 +299,9 @@ refinementRules.push(
 
               if (isAlwaysTrue) {
                 return context.providing({
-                  type,
+                  type: bridgeBetweenTypeFromAndBrandFrom
+                    ? Derive.ref(type.ref.copy([brandFrom, typeTo]))
+                    : type,
                   compute: () =>
                     context.factory.createCallExpression(isAlwaysTrue.compute(), [], [])
                 })
@@ -305,19 +309,19 @@ refinementRules.push(
             }
           })()
 
-          if (bridge && validation) {
-            const bridgeConst = bridge
+          if (bridgeBetweenTypeFromAndBrandFrom && brandValidation) {
+            const bridgeConst = bridgeBetweenTypeFromAndBrandFrom
             return context.providing({
               type,
               compute: () =>
                 context.factory.createCallExpression(
-                  compose.compute(),
+                  composeRefinement.compute(),
                   [],
-                  [bridgeConst.compute(), validation.compute()]
+                  [bridgeConst.compute(), brandValidation.compute()]
                 )
             })
           } else {
-            return validation
+            return brandValidation
           }
         }
       }
