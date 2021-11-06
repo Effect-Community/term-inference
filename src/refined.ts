@@ -11,6 +11,21 @@ export interface Brand<K extends string> {
 
 export type Branded<X, TypeName extends string> = X & Brand<TypeName>
 
+export interface BrandIdentifier<
+  X extends Brand<any>,
+  K extends keyof X[typeof BrandSymbol] & string
+> extends Refinement<
+    X extends infer Y & Brand<K> ? Y : never,
+    X extends (X extends infer Y & Brand<K> ? Y : never) ? X : never
+  > {}
+
+export function branded<
+  X extends Brand<any>,
+  K extends keyof X[typeof BrandSymbol] & string
+>(f: (_: X extends infer Y & Brand<K> ? Y : never) => boolean): BrandIdentifier<X, K> {
+  return refinement(f)
+}
+
 export class Refinement<A, B extends A> {
   readonly [VarianceSymbol]: {
     _A: (_: A) => void
@@ -28,12 +43,12 @@ export function refinement<A, B extends A>(f: (a: A) => boolean): Refinement<A, 
   return new Refinement(f)
 }
 
-export const compose = <A, B extends A, C extends B>(
+export const composeRefinement = <A, B extends A, C extends B>(
   left: Refinement<A, B>,
   right: Refinement<B, C>
 ): Refinement<A, C> => refinement((u) => left.is(u) && right.is(u))
 
-export const lazy = <A, B extends A>(
+export const lazyRefinement = <A, B extends A>(
   getRefinement: () => Refinement<A, B>
 ): Refinement<A, A> => {
   const ref = lazyRef(getRefinement)
@@ -53,7 +68,7 @@ export const isFunction = refinement<unknown, Function>((u) => typeof u === "fun
 export const isNotNull = refinement<object, {}>((u) => u != null)
 
 export const isAlwaysTrue = <A, K extends string>() =>
-  refinement<A, Branded<A, K>>(() => true)
+  branded<Branded<A, K>, K>(() => true)
 
 export type Min<
   K extends number | { readonly length: number },
@@ -81,4 +96,8 @@ export type Between<
 
 export type Int = Branded<number, "Int">
 
-export const isInt = refinement<number, Int>((u) => Number.isInteger(u))
+export const isInt = branded<Int, "Int">((u) => Number.isInteger(u))
+
+export type Even = Branded<Int, "Even">
+
+export const isEven = branded<Even, "Even">((u) => u % 2 == 0)

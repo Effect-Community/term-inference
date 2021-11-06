@@ -526,22 +526,34 @@ export class ResolutionContext {
       const inDerivation = new InDerivation(derivation, () => {
         inDerivation.used = true
         if (!added) {
-          this.statementsToAdd.push(
-            this.factory.createVariableStatement(
-              undefined,
-              this.factory.createVariableDeclarationList(
-                [
-                  this.factory.createVariableDeclaration(
-                    derivation,
-                    undefined,
-                    undefined,
-                    result.compute()
-                  )
-                ],
-                ts.NodeFlags.Const
-              )
+          const computed = result.compute()
+          const node = this.factory.createVariableStatement(
+            undefined,
+            this.factory.createVariableDeclarationList(
+              [
+                this.factory.createVariableDeclaration(
+                  derivation,
+                  undefined,
+                  undefined,
+                  computed
+                )
+              ],
+              ts.NodeFlags.Const
             )
           )
+          ts.addSyntheticLeadingComment(
+            node,
+            ts.SyntaxKind.SingleLineCommentTrivia,
+            " " + stringify(result.type),
+            true
+          )
+          ts.addSyntheticLeadingComment(
+            computed,
+            ts.SyntaxKind.MultiLineCommentTrivia,
+            " #__PURE__ ",
+            false
+          )
+          this.statementsToAdd.push(node)
           added = true
         }
         return derivation
