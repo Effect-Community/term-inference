@@ -1,7 +1,8 @@
-//import type * as D from "./domain.js"
-//import type * as P from "./prelude.js"
+import * as asserts from "assert"
 
-//export const { toJson } = implicitly<P.Codec<D.Person>>()
-//
-//console.log(toJson({ first: "mike", last: "arnaldi", age: 30 as D.Age }))
-//
+import { FirstName } from "./domain.js"
+
+asserts.equal(FirstName.is("Mike"), true)
+asserts.equal(FirstName.is(""), false)
+asserts.equal(FirstName.is(0), false)
+asserts.equal(FirstName.is({}), false)
