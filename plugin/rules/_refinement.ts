@@ -273,10 +273,17 @@ refinementRules.push(
                   )
 
                   if (fn) {
+                    const widenedMinMax = Derive.ref(
+                      type.ref.copy([Derive.ref(Derive.unknownType), brand])
+                    )
+                    const resolved = context.findInScope((_) =>
+                      _.ref.isAssignableTo(widenedMinMax.ref)
+                    )
+                    if (resolved) {
+                      return resolved
+                    }
                     return context.providing({
-                      type: bridgeBetweenTypeFromAndBrandFrom
-                        ? Derive.ref(type.ref.copy([brandFrom, typeTo]))
-                        : type,
+                      type: widenedMinMax,
                       compute: () =>
                         context.factory.createCallExpression(
                           fn.compute(),
