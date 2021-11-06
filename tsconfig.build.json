@@ -4,6 +4,7 @@
     "outDir": "lib",
     "target": "ES2021",
     "module": "ESNext",
+    "moduleResolution": "Node",
     "strict": true,
     "declaration": true,
     "experimentalDecorators": true,

@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf lib && ttsc -p tsconfig.build.json"
+    "build": "rm -rf lib && ttsc -p tsconfig.build.json",
+    "test": "TS_NODE_PROJECT=\"./tsconfig.build.json\" TS_NODE_COMPILER=\"ttypescript\" node --no-warnings --loader ts-node/esm src/index.ts"
   },
   "type": "module",
   "exports": {
