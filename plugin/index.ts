@@ -6,7 +6,7 @@ import * as ts from "typescript"
 import * as Derive from "./derivation"
 import { rules } from "./rules"
 
-export default function derivation(_program: ts.Program) {
+export default function derivation(_program: ts.Program, opts: Derive.Config) {
   const checker = _program.getTypeChecker()
 
   return {
@@ -145,6 +145,7 @@ export default function derivation(_program: ts.Program) {
         }
 
         const initialScope = new Derive.ImplicitScope(
+          opts,
           rules,
           importMap,
           factory,

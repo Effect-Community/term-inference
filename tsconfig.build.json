@@ -8,7 +8,7 @@
     "strict": true,
     "declaration": true,
     "experimentalDecorators": true,
-    "plugins": [{ "transform": "./plugin/index.ts" }]
+    "plugins": [{ "transform": "./plugin/index.ts", "emitTypeComments": false }]
   },
   "include": ["src/**/*.ts"]
 }

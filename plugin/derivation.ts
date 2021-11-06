@@ -497,8 +497,13 @@ export class InModule {
   constructor(readonly modulePath: string, readonly id: ts.Identifier) {}
 }
 
+export interface Config {
+  emitTypeComments?: boolean
+}
+
 export class ResolutionContext {
   constructor(
+    readonly config: Config,
     readonly rules: Rule[],
     readonly scope: (
       | {
@@ -541,12 +546,14 @@ export class ResolutionContext {
               ts.NodeFlags.Const
             )
           )
-          ts.addSyntheticLeadingComment(
-            node,
-            ts.SyntaxKind.SingleLineCommentTrivia,
-            " " + stringify(result.type),
-            true
-          )
+          if (this.config.emitTypeComments) {
+            ts.addSyntheticLeadingComment(
+              node,
+              ts.SyntaxKind.SingleLineCommentTrivia,
+              " " + stringify(result.type),
+              true
+            )
+          }
           ts.addSyntheticLeadingComment(
             computed,
             ts.SyntaxKind.MultiLineCommentTrivia,
@@ -602,6 +609,7 @@ export interface AddedDerivation {
 
 export class ImplicitScope {
   constructor(
+    private config: Config,
     private rules: Rule[],
     private importMap: ImportMap,
     private factory: ts.NodeFactory,
@@ -620,6 +628,7 @@ export class ImplicitScope {
 
   child(): ImplicitScope {
     return new ImplicitScope(
+      this.config,
       this.rules,
       this.importMap,
       this.factory,
@@ -690,6 +699,7 @@ export class ImplicitScope {
 
     scope.reverse()
     const context = new ResolutionContext(
+      this.config,
       this.rules,
       scope,
       this.factory,
