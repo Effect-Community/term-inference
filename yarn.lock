@@ -2109,10 +2109,10 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-ts-expose-internals@^4.4.4:
-  version "4.4.4"
-  resolved "https://registry.yarnpkg.com/ts-expose-internals/-/ts-expose-internals-4.4.4.tgz#956ddba72382434afdbd28c539ff8695a519a548"
-  integrity sha512-pZI+Jqb6dhfTACWBg9ahcVCYAX5s1KBCLm0FpwwhKxCvEFvmSLaMpTbyVf1h5pdCh2DS5uNPwG4AH+Vvqri9/g==
+ts-expose-internals@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/ts-expose-internals/-/ts-expose-internals-4.5.4.tgz#6c3166730afa43c1831914ed1cf6c72884a1f65d"
+  integrity sha512-HobejGI9ZnpRlyA0nlpIBpLG8A/gv+pDXP3L0OTRTqkJiInz3+yoMnRCaxw343pzQtxCYM0J/gpZ4IkLudrOWw==
 
 ts-node@^10.4.0:
   version "10.4.0"
