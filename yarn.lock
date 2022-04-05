@@ -229,17 +229,17 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
-"@effect-ts/core@^0.45.5":
-  version "0.45.5"
-  resolved "https://registry.yarnpkg.com/@effect-ts/core/-/core-0.45.5.tgz#ab984791cea4ad439c92a8c32a98fe10f9528ad4"
-  integrity sha512-hLJNtd2/A1Lnf6O68bDmalah6Ep2rn+6X0Q7Gb9mHfcsHsdzZDbWti1GcRF0oqw0p6Q/jnv+Fxvg1Msc57hroQ==
+"@effect-ts/core@^0.59.3":
+  version "0.59.3"
+  resolved "https://registry.yarnpkg.com/@effect-ts/core/-/core-0.59.3.tgz#049d420353b6e1cab834696683a8ea7057a451c0"
+  integrity sha512-Zx5NW/l3P656zqijwHnag7QG5LiQk/WWh4yMDGXT2KEWsfYIv+yocZeWqFTl7nRAcMaJK+DikvHA4ULNTNoxWw==
   dependencies:
-    "@effect-ts/system" "^0.42.5"
+    "@effect-ts/system" "^0.56.3"
 
-"@effect-ts/system@^0.42.5":
-  version "0.42.5"
-  resolved "https://registry.yarnpkg.com/@effect-ts/system/-/system-0.42.5.tgz#f8dbba53385ae63c841637625def53b3ba2d9415"
-  integrity sha512-x+5vtAkfmUfzYQ80LpVyWjidHgNoIxelbtwfPC0mC2YQhgWzUL3rWpzJXvpas6mGzjJhpbcGuxvVL4q3K3ng6w==
+"@effect-ts/system@^0.56.3":
+  version "0.56.3"
+  resolved "https://registry.yarnpkg.com/@effect-ts/system/-/system-0.56.3.tgz#ccdb007549ef97858bf002faa552786bb8d0b84b"
+  integrity sha512-629/cvuGQnp075HlQgLjfiii6pfRHQVr28K/gE8/5ZWsJPYWn1a/2Tv/Q8KYHjGNGQCciG2PLsZRLe9Yrvzvyg==
 
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
